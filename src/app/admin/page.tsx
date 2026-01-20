@@ -27,7 +27,34 @@ export default async function AdminPage() {
             manualAdjustment: t("admin.manualAdjustment"),
             note: t("admin.note"),
             save: t("admin.save"),
-            saving: t("admin.saving")
+            saving: t("admin.saving"),
+            id: t("admin.id"),
+            pickupTime: t("admin.pickupTime"),
+            route: t("admin.route"),
+            vehicle: t("admin.vehicle"),
+            amount: t("admin.amount"),
+            action: t("admin.action"),
+            empty: t("admin.empty"),
+            adjustmentHint: t("admin.adjustmentHint"),
+            notePlaceholder: t("admin.notePlaceholder"),
+            loginPlaceholder: t("admin.loginPlaceholder"),
+            urgentTag: t("admin.urgentTag"),
+            close: t("admin.close"),
+            statuses: {
+              PENDING_PAYMENT: t("status.PENDING_PAYMENT"),
+              PAID: t("status.PAID"),
+              CONFIRMED: t("status.CONFIRMED"),
+              IN_SERVICE: t("status.IN_SERVICE"),
+              COMPLETED: t("status.COMPLETED"),
+              CANCELLED: t("status.CANCELLED")
+            },
+            vehicles: {
+              "5座车（经济型）": t("vehicle.5seats"),
+              "7座车（商务型）": t("vehicle.7seats"),
+              "9座车（大空间）": t("vehicle.9seats"),
+              "豪华型（VIP）": t("vehicle.luxury"),
+              "大巴车（团体）": t("vehicle.bus")
+            }
           }}
         />
       </div>

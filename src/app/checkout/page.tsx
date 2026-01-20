@@ -7,6 +7,7 @@ import { formatDateTimeJST } from "@/lib/timeFormat";
 import { formatMoneyFromJpy, getCurrency } from "@/lib/currency";
 import { getT, getLocale } from "@/lib/i18n";
 import { z } from "zod";
+import { findAirportByCode, findAreaByCode, POPULAR_HOTELS } from "@/lib/locationData";
 
 export default async function CheckoutPage({
   searchParams
@@ -16,7 +17,27 @@ export default async function CheckoutPage({
   const params = await searchParams;
   const { t } = await getT();
   const locale = await getLocale();
+  const isZh = locale.startsWith("zh");
   const currency = await getCurrency();
+
+  const getLocalizedArea = (code: string) => {
+    const airport = findAirportByCode(code);
+    if (airport) return isZh ? airport.name.zh : airport.name.en;
+    const area = findAreaByCode(code);
+    if (area) return isZh ? area.name.zh : area.name.en;
+    const hotel = POPULAR_HOTELS.find(h => h.code === code);
+    if (hotel) return isZh ? hotel.name.zh : hotel.name.en;
+    return code;
+  };
+
+  const vehicleKeyMap: Record<string, string> = {
+    "5座车（经济型）": "5seats",
+    "7座车（商务型）": "7seats",
+    "9座车（大空间）": "9seats",
+    "豪华型（VIP）": "luxury",
+    "大巴车（团体）": "bus"
+  };
+
   const ParsedSchema = SearchSchema.extend({ vehicleTypeId: z.string().min(5) });
   const parsed = ParsedSchema.safeParse({
     tripType: params.tripType,
@@ -36,7 +57,7 @@ export default async function CheckoutPage({
         <div className="p-5 bg-white border border-slate-200 rounded-2xl">
           <div className="font-semibold">{t("vehicles.paramsError")}</div>
           <div className="text-sm text-slate-600 mt-2">
-            请从车型选择页进入。
+            {t("checkout.enterFromVehicles")}
           </div>
           <div className="mt-4 flex gap-3">
             <Link className="text-brand-700 underline" href="/">
@@ -80,7 +101,7 @@ export default async function CheckoutPage({
         <div className="p-5 bg-white border border-slate-200 rounded-2xl">
           <div className="font-semibold">{t("checkout.noPrice")}</div>
           <div className="text-sm text-slate-600 mt-2">
-            请返回选择其他车型或更换路线。
+            {t("checkout.selectOther")}
           </div>
           <div className="mt-3">
             <Link
@@ -100,6 +121,9 @@ export default async function CheckoutPage({
   const urgent = isUrgent ? rule.urgentFeeJpy : 0;
   const total = base + night + urgent;
 
+  const vKey = vehicleKeyMap[vehicle.name];
+  const displayName = vKey ? t(`vehicle.${vKey}`) : vehicle.name;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -116,7 +140,7 @@ export default async function CheckoutPage({
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
-                  {q.fromArea} → {q.toArea}
+                  {getLocalizedArea(q.fromArea)} → {getLocalizedArea(q.toArea)}
                 </span>
                 <span className="text-slate-300">•</span>
                 <span className="flex items-center gap-1.5">
@@ -182,7 +206,16 @@ export default async function CheckoutPage({
                   submit: t("form.submit"),
                   submitting: t("form.submitting"),
                   agree: t("form.agree"),
-                  orderFailed: t("form.orderFailed")
+                  orderFailed: t("form.orderFailed"),
+                  airportTag: t("checkout.airportTag"),
+                  placeholderFlight: t("form.placeholderFlight"),
+                  placeholderFlightNote: t("form.placeholderFlightNote"),
+                  placeholderName: t("form.placeholderName"),
+                  placeholderPhone: t("form.placeholderPhone"),
+                  placeholderSpecial: t("form.placeholderSpecial"),
+                  placeholderAirport: t("search.placeholderAirport"),
+                  placeholderLocation: t("search.placeholderLocation"),
+                  locationTip: t("search.locationTip")
                 }}
               />
             </div>
@@ -201,7 +234,7 @@ export default async function CheckoutPage({
             <div className="space-y-3 text-sm">
               <div className="flex justify-between items-center py-2 border-b border-slate-200">
                 <span className="text-slate-600">{t("checkout.vehicle")}</span>
-                <span className="font-semibold text-slate-900">{vehicle.name}</span>
+                <span className="font-semibold text-slate-900">{displayName}</span>
               </div>
               <div className="flex justify-between items-center py-2 border-b border-slate-200">
                 <span className="text-slate-600">{t("checkout.base")}</span>
@@ -226,9 +259,7 @@ export default async function CheckoutPage({
             </div>
 
             <div className="mt-6 p-3 bg-blue-50 rounded-lg border border-blue-200">
-              <p className="text-xs text-blue-700">
-                <strong>MVP 提醒：</strong>此处仅展示报价，支付可在下一阶段接 Stripe/PayPal。
-              </p>
+              <p className="text-xs text-blue-700" dangerouslySetInnerHTML={{ __html: t("checkout.mvpNote") }} />
             </div>
             </div>
           </aside>

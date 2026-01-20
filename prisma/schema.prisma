@@ -8,33 +8,31 @@ datasource db {
 }
 
 model VehicleType {
-  id            String   @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String
   seats         Int
   luggageSmall  Int
   luggageMedium Int
   luggageLarge  Int
-  isLuxury      Boolean  @default(false)
-  isBus         Boolean  @default(false)
+  isLuxury      Boolean       @default(false)
+  isBus         Boolean       @default(false)
   description   String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  bookings Booking[]
-  pricing  PricingRule[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  bookings      Booking[]
+  pricing       PricingRule[]
 }
 
 model PricingRule {
-  id           String   @id @default(cuid())
-  fromArea     String
-  toArea       String
-  tripType     String
-  basePriceJpy Int
-  nightFeeJpy  Int @default(0)
-  urgentFeeJpy Int @default(0)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
+  id            String      @id @default(cuid())
+  fromArea      String
+  toArea        String
+  tripType      String
+  basePriceJpy  Int
+  nightFeeJpy   Int         @default(0)
+  urgentFeeJpy  Int         @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
   vehicleTypeId String
   vehicleType   VehicleType @relation(fields: [vehicleTypeId], references: [id])
 
@@ -42,45 +40,35 @@ model PricingRule {
 }
 
 model Booking {
-  id              String        @id @default(cuid())
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-
-  status          String        @default("PENDING_PAYMENT")
-  isUrgent        Boolean       @default(false)
-  currency        String        @default("JPY")
-
-  tripType        String
-  pickupTime      DateTime
-  pickupLocation  String
-  dropoffLocation String
-
-  flightNumber    String?
-  flightDate      DateTime?
-  flightNote      String?
-
-  passengers      Int
-  luggageSmall    Int @default(0)
-  luggageMedium   Int @default(0)
-  luggageLarge    Int @default(0)
-
-  contactName     String
-  contactPhone    String
-  contactEmail    String
-  contactNote     String?
-
-  pricingBaseJpy  Int
-  pricingNightJpy Int @default(0)
-  pricingUrgentJpy Int @default(0)
-  pricingManualAdjustmentJpy Int @default(0)
-  pricingTotalJpy Int
-  pricingNote     String?
-
-  cancelReason    String?
-  cancelledAt     DateTime?
-
-  vehicleTypeId   String
-  vehicleType     VehicleType   @relation(fields: [vehicleTypeId], references: [id])
+  id                         String      @id @default(cuid())
+  createdAt                  DateTime    @default(now())
+  updatedAt                  DateTime    @updatedAt
+  status                     String      @default("PENDING_PAYMENT")
+  isUrgent                   Boolean     @default(false)
+  currency                   String      @default("JPY")
+  tripType                   String
+  pickupTime                 DateTime
+  pickupLocation             String
+  dropoffLocation            String
+  flightNumber               String?
+  flightDate                 DateTime?
+  flightNote                 String?
+  passengers                 Int
+  luggageSmall               Int         @default(0)
+  luggageMedium              Int         @default(0)
+  luggageLarge               Int         @default(0)
+  contactName                String
+  contactPhone               String
+  contactEmail               String
+  contactNote                String?
+  pricingBaseJpy             Int
+  pricingNightJpy            Int         @default(0)
+  pricingUrgentJpy           Int         @default(0)
+  pricingManualAdjustmentJpy Int         @default(0)
+  pricingTotalJpy            Int
+  pricingNote                String?
+  cancelReason               String?
+  cancelledAt                DateTime?
+  vehicleTypeId              String
+  vehicleType                VehicleType @relation(fields: [vehicleTypeId], references: [id])
 }
-
-

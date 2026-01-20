@@ -1,3 +1,3 @@
-export const DEV_COOKIE = "japango_dev";
+export const DEV_COOKIE = "TripGo_dev";
 
 

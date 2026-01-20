@@ -1,6 +1,6 @@
-# JapanGo (MVP) — 日本机场接送机预订平台
+# TripGo (MVP) — 机场接送机预订平台
 
-这是一个可运行的 **JapanGo** MVP：用户可搜索/选择车型/下单，后台管理员可调价与改订单状态，并实现 **24 小时内订单为急单（不可自助取消）** 的规则。
+这是一个可运行的 **TripGo** MVP：用户可搜索/选择车型/下单，后台管理员可调价与改订单状态，并实现 **24 小时内订单为急单（不可自助取消）** 的规则。
 
 ## 技术栈
 - Next.js (App Router) + TypeScript
@@ -11,7 +11,6 @@
 
 ### 1) 安装依赖
 ```bash
-cd "/Users/bruce7/Documents/想做的事&申请/Blueberry_Studio"
 npm install
 ```
 

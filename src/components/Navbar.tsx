@@ -12,6 +12,7 @@ export function Navbar({
   labels: {
     contact: string;
     orders: string;
+    book: string;
     admin: string;
     lang: string;
     currency: string;
@@ -37,7 +38,7 @@ export function Navbar({
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-brand-500 to-brand-700 rounded-xl blur opacity-75 group-hover:opacity-100 transition-opacity"></div>
               <div className="relative h-10 w-10 rounded-xl bg-gradient-to-br from-brand-600 to-brand-700 text-white grid place-items-center font-bold text-lg shadow-lg">
-                JG
+                TG
               </div>
             </div>
             <div className="leading-tight hidden sm:block">
@@ -47,6 +48,27 @@ export function Navbar({
           </Link>
 
           <nav className="flex items-center gap-2 sm:gap-4 text-sm">
+            <div className="flex items-center gap-1 mr-2 border-r border-slate-200 pr-2">
+              <Link 
+                href="/" 
+                className="px-3 py-2 rounded-lg text-brand-600 hover:bg-brand-50 font-bold transition-colors duration-200"
+              >
+                {labels.book}
+              </Link>
+              <Link 
+                href="/orders" 
+                className="hidden sm:block px-3 py-2 rounded-lg text-slate-700 hover:text-brand-600 hover:bg-slate-50 font-medium transition-colors duration-200"
+              >
+                {labels.orders}
+              </Link>
+              <Link 
+                href="/contact" 
+                className="hidden md:block px-3 py-2 rounded-lg text-slate-700 hover:text-brand-600 hover:bg-slate-50 font-medium transition-colors duration-200"
+              >
+                {labels.contact}
+              </Link>
+            </div>
+
             <LanguageSwitch
               locale={locale}
               labelLang={labels.lang}
@@ -62,18 +84,6 @@ export function Navbar({
                 { code: "USD", text: labels.usd }
               ]}
             />
-            <Link 
-              href="/#contact" 
-              className="hidden sm:inline-flex px-4 py-2 rounded-lg text-slate-700 hover:text-brand-600 hover:bg-slate-50 font-medium transition-colors duration-200"
-            >
-              {labels.contact}
-            </Link>
-            <Link 
-              href="/orders" 
-              className="hidden sm:inline-flex px-4 py-2 rounded-lg text-slate-700 hover:text-brand-600 hover:bg-slate-50 font-medium transition-colors duration-200"
-            >
-              {labels.orders}
-            </Link>
             {showAdmin ? (
               <Link
                 href="/admin"

@@ -1,21 +1,25 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { MobileNav } from "@/components/MobileNav";
 import { getT } from "@/lib/i18n";
 import { cookies } from "next/headers";
 import { DEV_COOKIE } from "@/lib/devMode";
 import { getCurrency } from "@/lib/currency";
 
-export const metadata: Metadata = {
-  title: "JapanGo - 日本机场接送机预订",
-  description: "JapanGo：日本机场接送机预订平台，支持多车型、急单规则、后台改价。"
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { t } = await getT();
+  return {
+    title: `${t("brand.name")} - ${t("brand.tagline")}`,
+    description: t("home.subtitle")
+  };
+}
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { locale, t } = await getT();
   const c = await cookies();
   const isDev = c.get(DEV_COOKIE)?.value === "1";
+  const showAdmin = isDev; // Only show in dev mode or with specific cookie
   const currency = await getCurrency();
   return (
     <html lang={locale === "en" ? "en" : "zh-CN"}>
@@ -26,6 +30,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             labels={{
               contact: t("nav.contact"),
               orders: t("nav.orders"),
+              book: t("nav.book"),
               admin: t("nav.admin"),
               lang: t("nav.lang"),
               currency: t("nav.currency"),
@@ -37,18 +42,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               brandName: t("brand.name"),
               brandTagline: t("brand.tagline")
             }}
-            showAdmin={isDev}
+            showAdmin={showAdmin}
             currency={currency}
           />
-          <main className="flex-1">{children}</main>
-          <Footer
+          <main className="flex-1 pb-16 md:pb-0">{children}</main>
+          <MobileNav 
             labels={{
-              brand: t("footer.brand"),
-              desc: t("footer.desc"),
-              contact: t("footer.contact"),
-              rules: t("footer.rules"),
-              ruleText: t("footer.ruleText"),
-              note: t("footer.note")
+              home: t("nav.home"),
+              orders: t("nav.orders"),
+              contact: t("nav.contact")
             }}
           />
         </div>

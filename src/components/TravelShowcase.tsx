@@ -1,20 +1,22 @@
 import Image from "next/image";
+import { getT } from "@/lib/i18n";
 
-export function TravelShowcase() {
+export async function TravelShowcase() {
+  const { t } = await getT();
   const cards = [
     {
-      title: "Tokyo",
-      desc: "Shibuya · Asakusa · Skytree",
+      title: t("showcase.tokyo.title"),
+      desc: t("showcase.tokyo.desc"),
       src: "/travel/tokyo.svg"
     },
     {
-      title: "Kyoto",
-      desc: "Fushimi Inari · Gion · Kiyomizu-dera",
+      title: t("showcase.kyoto.title"),
+      desc: t("showcase.kyoto.desc"),
       src: "/travel/kyoto.svg"
     },
     {
-      title: "Osaka",
-      desc: "Dotonbori · Castle · Food tour",
+      title: t("showcase.osaka.title"),
+      desc: t("showcase.osaka.desc"),
       src: "/travel/osaka.svg"
     }
   ];
@@ -22,13 +24,12 @@ export function TravelShowcase() {
   return (
     <section className="mt-6">
       <div className="p-6 rounded-2xl bg-white border border-slate-200">
-        <div className="text-sm text-slate-500">JapanGo</div>
+        <div className="text-sm text-slate-500">{t("brand.name")}</div>
         <h3 className="mt-1 text-xl font-semibold tracking-tight">
-          Airport transfer · Fixed price · 24/7 support
+          {t("showcase.title")}
         </h3>
         <div className="mt-2 text-sm text-slate-600">
-          Reliable airport pickups & drop-offs across Japan. Choose your vehicle, share flight details, and
-          book in minutes.
+          {t("showcase.subtitle")}
         </div>
 
         <div className="mt-5 grid md:grid-cols-3 gap-4">

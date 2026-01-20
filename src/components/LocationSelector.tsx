@@ -11,6 +11,7 @@ type LocationSelectorProps = {
   isAirport?: boolean;
   locale?: string;
   className?: string;
+  tip?: string;
 };
 
 export function LocationSelector({
@@ -20,7 +21,8 @@ export function LocationSelector({
   label,
   isAirport = false,
   locale = "zh",
-  className = ""
+  className = "",
+  tip
 }: LocationSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -133,7 +135,7 @@ export function LocationSelector({
       </div>
       {isOpen && !isAirport && (
         <div className="mt-1 text-xs text-slate-500">
-          {isZh ? "提示：可输入具体地址，或从上方选择热门区域/酒店" : "Tip: Enter a specific address, or select from popular areas/hotels above"}
+          {tip || (isZh ? "提示：可输入具体地址，或从上方选择热门区域/酒店" : "Tip: Enter a specific address, or select from popular areas/hotels above")}
         </div>
       )}
     </div>

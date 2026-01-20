@@ -8,7 +8,7 @@ import type { Currency } from "@/lib/currency";
 // Client-side currency helper
 function getCurrencyFromCookie(): Currency {
   if (typeof document === "undefined") return "JPY";
-  const cookie = document.cookie.split("; ").find((c) => c.startsWith("japango_currency="));
+  const cookie = document.cookie.split("; ").find((c) => c.startsWith("TripGo_currency="));
   const currencyFromCookie = cookie?.split("=")[1]?.toUpperCase();
   if (currencyFromCookie === "USD" || currencyFromCookie === "CNY") {
     return currencyFromCookie;
@@ -43,6 +43,20 @@ type Labels = {
   note: string;
   save: string;
   saving: string;
+  id: string;
+  pickupTime: string;
+  route: string;
+  vehicle: string;
+  amount: string;
+  action: string;
+  empty: string;
+  adjustmentHint: string;
+  notePlaceholder: string;
+  loginPlaceholder: string;
+  urgentTag: string;
+  close: string;
+  statuses: Record<string, string>;
+  vehicles: Record<string, string>;
 };
 
 export function AdminClient({ labels, locale = "zh-CN" }: { labels: Labels; locale?: string }) {
@@ -120,7 +134,7 @@ export function AdminClient({ labels, locale = "zh-CN" }: { labels: Labels; loca
             className="flex-1 px-3 py-2 rounded-xl border border-slate-200 bg-white"
             value={token}
             onChange={(e) => setToken(e.target.value)}
-            placeholder="输入 ADMIN_TOKEN"
+            placeholder={labels.loginPlaceholder}
           />
           <button
             onClick={load}
@@ -143,47 +157,51 @@ export function AdminClient({ labels, locale = "zh-CN" }: { labels: Labels; loca
           <table className="min-w-full text-sm">
             <thead className="text-left text-slate-600">
               <tr className="border-b border-slate-200">
-                <th className="py-2 pr-4">订单号</th>
-                <th className="py-2 pr-4">上车时间</th>
-                <th className="py-2 pr-4">路线</th>
-                <th className="py-2 pr-4">车型</th>
-                <th className="py-2 pr-4">金额</th>
-                <th className="py-2 pr-4">状态</th>
-                <th className="py-2 pr-4">操作</th>
+                <th className="py-2 pr-4">{labels.id}</th>
+                <th className="py-2 pr-4">{labels.pickupTime}</th>
+                <th className="py-2 pr-4">{labels.route}</th>
+                <th className="py-2 pr-4">{labels.vehicle}</th>
+                <th className="py-2 pr-4">{labels.amount}</th>
+                <th className="py-2 pr-4">{labels.status}</th>
+                <th className="py-2 pr-4">{labels.action}</th>
               </tr>
             </thead>
             <tbody>
               {rows.length === 0 ? (
                 <tr>
                   <td className="py-4 text-slate-500" colSpan={7}>
-                    暂无数据。请先用用户端下单，然后回来加载。
+                    {labels.empty}
                   </td>
                 </tr>
               ) : (
-                rows.map((r) => (
-                  <tr key={r.id} className="border-b border-slate-100">
-                    <td className="py-3 pr-4 font-mono text-xs">{r.id}</td>
-                      <td className="py-3 pr-4">{formatDateTimeJST(r.pickupTime, locale)}</td>
-                      <td className="py-3 pr-4">{r.fromTo}</td>
-                      <td className="py-3 pr-4">{r.vehicleName}</td>
+                rows.map((r) => {
+                  const displayVehicle = labels.vehicles[r.vehicleName] || r.vehicleName;
+                  const displayStatus = labels.statuses[r.status] || r.status;
+
+                  return (
+                    <tr key={r.id} className="border-b border-slate-100">
+                      <td className="py-3 pr-4 font-mono text-xs">{r.id}</td>
+                        <td className="py-3 pr-4">{formatDateTimeJST(r.pickupTime, locale)}</td>
+                        <td className="py-3 pr-4">{r.fromTo}</td>
+                        <td className="py-3 pr-4">{displayVehicle}</td>
+                        <td className="py-3 pr-4">
+                          <div className="font-medium">{formatMoneyFromJpy(r.totalJpy, currency, locale)}</div>
+                          {r.manualAdjustmentJpy !== 0 ? (
+                            <div className="text-xs text-slate-500">
+                              {labels.manualAdjustment}: {formatMoneyFromJpy(r.manualAdjustmentJpy, currency, locale)}
+                            </div>
+                          ) : null}
+                        </td>
                       <td className="py-3 pr-4">
-                        <div className="font-medium">{formatMoneyFromJpy(r.totalJpy, currency, locale)}</div>
-                        {r.manualAdjustmentJpy !== 0 ? (
-                          <div className="text-xs text-slate-500">
-                            {labels.manualAdjustment}: {formatMoneyFromJpy(r.manualAdjustmentJpy, currency, locale)}
-                          </div>
-                        ) : null}
+                        <span className="inline-flex items-center gap-2">
+                          {displayStatus}
+                          {r.isUrgent ? (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
+                              {labels.urgentTag}
+                            </span>
+                          ) : null}
+                        </span>
                       </td>
-                    <td className="py-3 pr-4">
-                      <span className="inline-flex items-center gap-2">
-                        {r.status}
-                        {r.isUrgent ? (
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
-                            急单
-                          </span>
-                        ) : null}
-                      </span>
-                    </td>
                     <td className="py-3 pr-4">
                       <button
                         className="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50"
@@ -193,9 +211,10 @@ export function AdminClient({ labels, locale = "zh-CN" }: { labels: Labels; loca
                       </button>
                     </td>
                   </tr>
-                ))
-              )}
-            </tbody>
+                );
+              })
+            )}
+          </tbody>
           </table>
         </div>
       </div>
@@ -215,12 +234,9 @@ export function AdminClient({ labels, locale = "zh-CN" }: { labels: Labels; loca
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               >
-                <option value="PENDING_PAYMENT">PENDING_PAYMENT</option>
-                <option value="PAID">PAID</option>
-                <option value="CONFIRMED">CONFIRMED</option>
-                <option value="IN_SERVICE">IN_SERVICE</option>
-                <option value="COMPLETED">COMPLETED</option>
-                <option value="CANCELLED">CANCELLED</option>
+                {Object.entries(labels.statuses).map(([val, label]) => (
+                  <option key={val} value={val}>{label}</option>
+                ))}
               </select>
             </label>
 
@@ -232,7 +248,7 @@ export function AdminClient({ labels, locale = "zh-CN" }: { labels: Labels; loca
                 value={manualAdjustmentJpy}
                 onChange={(e) => setManualAdjustmentJpy(Number(e.target.value))}
               />
-              <div className="text-xs text-slate-500 mt-1">可为负数（优惠）或正数（加价）</div>
+              <div className="text-xs text-slate-500 mt-1">{labels.adjustmentHint}</div>
             </label>
 
             <label className="text-sm block">
@@ -241,7 +257,7 @@ export function AdminClient({ labels, locale = "zh-CN" }: { labels: Labels; loca
                 className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
                 value={pricingNote}
                 onChange={(e) => setPricingNote(e.target.value)}
-                placeholder="例如：深夜接送 +2000"
+                placeholder={labels.notePlaceholder}
               />
             </label>
           </div>
@@ -259,7 +275,7 @@ export function AdminClient({ labels, locale = "zh-CN" }: { labels: Labels; loca
               disabled={loading}
               onClick={() => setEditingId(null)}
             >
-              关闭
+              {labels.close}
             </button>
           </div>
         </div>

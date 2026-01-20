@@ -63,36 +63,38 @@ export default async function SuccessPage({
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
-            下单成功（MVP：未接支付）
+            {t("success.badge")}
           </div>
 
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-2">
-            订单已创建
+            {t("success.title")}
           </h1>
-          <p className="text-slate-600 mb-8">您的订单已成功提交，我们会尽快与您联系确认</p>
+          <p className="text-slate-600 mb-8">{t("success.subtitle")}</p>
 
           {/* Order Details */}
           <div className="bg-slate-50 rounded-xl p-6 mb-8 text-left">
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between py-2 border-b border-slate-200">
-                <span className="text-slate-500 font-medium">订单号</span>
+                <span className="text-slate-500 font-medium">{t("orders.id")}</span>
                 <span className="font-mono font-semibold text-slate-900">{booking.id}</span>
               </div>
               <div className="flex items-center justify-between py-2 border-b border-slate-200">
-                <span className="text-slate-500 font-medium">车型</span>
-                <span className="font-semibold text-slate-900">{booking.vehicleType.name}</span>
+                <span className="text-slate-500 font-medium">{t("orders.vehicle")}</span>
+                <span className="font-semibold text-slate-900">
+                  {locale.startsWith("en") ? (t(`vehicle.${booking.vehicleType.id}`) || booking.vehicleType.name) : booking.vehicleType.name}
+                </span>
               </div>
               <div className="flex items-center justify-between py-2 border-b border-slate-200">
                 <span className="text-slate-500 font-medium">{t("success.pickupTime")}</span>
                 <span className="font-semibold text-slate-900">{formatDateTimeJST(booking.pickupTime, locale)}</span>
               </div>
               <div className="flex items-center justify-between py-2">
-                <span className="text-slate-500 font-medium">状态</span>
+                <span className="text-slate-500 font-medium">{t("orders.status")}</span>
                 <span className="inline-flex items-center gap-1.5">
-                  <span className="font-semibold text-slate-900">{booking.status}</span>
+                  <span className="font-semibold text-slate-900">{t(`status.${booking.status}`)}</span>
                   {booking.isUrgent ? (
                     <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 text-xs font-medium">
-                      急单
+                      {t("orders.urgentTag")}
                     </span>
                   ) : null}
                 </span>
@@ -106,7 +108,7 @@ export default async function SuccessPage({
               className="btn-primary inline-flex items-center justify-center gap-2"
               href="/orders"
             >
-              去「我的订单」查看/取消
+              {t("success.viewOrders")}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
@@ -120,9 +122,7 @@ export default async function SuccessPage({
           </div>
 
           <div className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-200">
-            <p className="text-xs text-blue-700">
-              <strong>MVP 提醒：</strong>你可以在后台对该订单调价与改状态：进入 /admin 并输入 ADMIN_TOKEN。
-            </p>
+            <p className="text-xs text-blue-700" dangerouslySetInnerHTML={{ __html: t("success.mvpHint") }} />
           </div>
         </div>
       </div>

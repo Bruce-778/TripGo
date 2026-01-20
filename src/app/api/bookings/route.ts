@@ -2,13 +2,15 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { CreateBookingSchema } from "@/lib/validators";
 import { computeNightFee, isUrgentOrder } from "@/lib/bookingRules";
+import { getT } from "@/lib/i18n";
 
 export async function POST(req: Request) {
+  const { t } = await getT();
   try {
     const json = await req.json();
     const parsed = CreateBookingSchema.safeParse(json);
     if (!parsed.success) {
-      return NextResponse.json({ error: "参数不合法", details: parsed.error.flatten() }, { status: 400 });
+      return NextResponse.json({ error: t("api.invalidParams"), details: parsed.error.flatten() }, { status: 400 });
     }
 
     const data = parsed.data;
@@ -19,7 +21,7 @@ export async function POST(req: Request) {
 
     const vehicle = await prisma.vehicleType.findUnique({ where: { id: data.vehicleTypeId } });
     if (!vehicle) {
-      return NextResponse.json({ error: "车型不存在" }, { status: 404 });
+      return NextResponse.json({ error: t("api.orderNotFound") }, { status: 404 });
     }
 
     const rule = await prisma.pricingRule.findFirst({
@@ -31,19 +33,19 @@ export async function POST(req: Request) {
       }
     });
     if (!rule) {
-      return NextResponse.json({ error: "该路线暂无报价" }, { status: 404 });
+      return NextResponse.json({ error: t("checkout.noPrice") }, { status: 404 });
     }
 
     // 简单容量校验（可扩展为更复杂的行李体积/尺寸规则）
     if (data.passengers > vehicle.seats) {
-      return NextResponse.json({ error: "人数超过该车型座位数，请升级车型" }, { status: 400 });
+      return NextResponse.json({ error: t("api.passengersExceeded") }, { status: 400 });
     }
     if (
       data.luggageSmall > vehicle.luggageSmall ||
       data.luggageMedium > vehicle.luggageMedium ||
       data.luggageLarge > vehicle.luggageLarge
     ) {
-      return NextResponse.json({ error: "行李数量超过该车型容量，请升级车型" }, { status: 400 });
+      return NextResponse.json({ error: t("api.luggageExceeded") }, { status: 400 });
     }
 
     const base = rule.basePriceJpy;
@@ -78,7 +80,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ bookingId: booking.id });
   } catch (e: any) {
-    return NextResponse.json({ error: e?.message ?? "服务器错误" }, { status: 500 });
+    return NextResponse.json({ error: e?.message ?? t("api.serverError") }, { status: 500 });
   }
 }
 

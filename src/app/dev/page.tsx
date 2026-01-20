@@ -9,7 +9,7 @@ export default async function DevPage() {
         <div className="text-sm text-slate-500">Developer</div>
         <h2 className="mt-1 text-2xl font-semibold tracking-tight">Unlock Admin</h2>
         <div className="mt-2 text-sm text-slate-600">
-          输入你的 <span className="font-mono">ADMIN_TOKEN</span> 解锁后台入口（仅开发者可见）。
+          {t("dev.unlock")}
         </div>
         <div className="mt-5">
           <DevUnlockClient

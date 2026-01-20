@@ -1,4 +1,4 @@
-// 日本机场、航站楼、热门区域、酒店数据
+// 机场、航站楼、热门区域、酒店数据
 
 export type AirportCode = "NRT" | "HND" | "KIX" | "NGO" | "CTS";
 

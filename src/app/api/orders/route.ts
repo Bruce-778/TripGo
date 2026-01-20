@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getT } from "@/lib/i18n";
 
 export async function GET(req: Request) {
+  const { t } = await getT();
   const url = new URL(req.url);
   const email = url.searchParams.get("email")?.trim();
-  if (!email) return NextResponse.json({ error: "缺少邮箱" }, { status: 400 });
+  if (!email) return NextResponse.json({ error: t("orders.email") }, { status: 400 });
 
   const bookings = await prisma.booking.findMany({
     where: { contactEmail: email },

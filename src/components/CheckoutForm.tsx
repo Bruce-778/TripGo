@@ -28,6 +28,15 @@ type Labels = {
   submitting: string;
   agree: string;
   orderFailed: string;
+  airportTag: string;
+  placeholderFlight: string;
+  placeholderFlightNote: string;
+  placeholderName: string;
+  placeholderPhone: string;
+  placeholderSpecial: string;
+  placeholderAirport: string;
+  placeholderLocation: string;
+  locationTip: string;
 };
 
 function Field({
@@ -47,8 +56,8 @@ function Field({
 
 export function CheckoutForm({ preset, labels, locale = "zh" }: { preset: Preset; labels: Labels; locale?: string }) {
   const router = useRouter();
-  const [pickupLocation, setPickupLocation] = useState(preset.tripType === "PICKUP" ? `${preset.fromArea} Airport` : preset.fromArea);
-  const [dropoffLocation, setDropoffLocation] = useState(preset.tripType === "DROPOFF" ? `${preset.toArea} Airport` : preset.toArea);
+  const [pickupLocation, setPickupLocation] = useState(preset.tripType === "PICKUP" ? `${preset.fromArea} ${labels.airportTag}` : preset.fromArea);
+  const [dropoffLocation, setDropoffLocation] = useState(preset.tripType === "DROPOFF" ? `${preset.toArea} ${labels.airportTag}` : preset.toArea);
   const [flightNumber, setFlightNumber] = useState("");
   const [flightNote, setFlightNote] = useState("");
   const [contactName, setContactName] = useState("");
@@ -112,7 +121,7 @@ export function CheckoutForm({ preset, labels, locale = "zh" }: { preset: Preset
             className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
             value={flightNumber}
             onChange={(e) => setFlightNumber(e.target.value)}
-            placeholder="例如：NH802 / JL123"
+            placeholder={labels.placeholderFlight}
           />
         </Field>
         <Field label={labels.flightNote}>
@@ -120,7 +129,7 @@ export function CheckoutForm({ preset, labels, locale = "zh" }: { preset: Preset
             className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
             value={flightNote}
             onChange={(e) => setFlightNote(e.target.value)}
-            placeholder="例如：到达 T2 / 可能延误"
+            placeholder={labels.placeholderFlightNote}
           />
         </Field>
       </div>
@@ -130,17 +139,19 @@ export function CheckoutForm({ preset, labels, locale = "zh" }: { preset: Preset
           value={pickupLocation}
           onChange={setPickupLocation}
           label={labels.pickupLocation}
-          placeholder={preset.tripType === "PICKUP" ? "选择机场航站楼或输入具体地址" : "选择地点或输入具体地址"}
+          placeholder={preset.tripType === "PICKUP" ? labels.placeholderAirport : labels.placeholderLocation}
           isAirport={preset.tripType === "PICKUP"}
           locale={locale}
+          tip={labels.locationTip}
         />
         <LocationSelector
           value={dropoffLocation}
           onChange={setDropoffLocation}
           label={labels.dropoffLocation}
-          placeholder={preset.tripType === "DROPOFF" ? "选择机场航站楼或输入具体地址" : "选择地点或输入具体地址"}
+          placeholder={preset.tripType === "DROPOFF" ? labels.placeholderAirport : labels.placeholderLocation}
           isAirport={preset.tripType === "DROPOFF"}
           locale={locale}
+          tip={labels.locationTip}
         />
       </div>
 
@@ -150,7 +161,7 @@ export function CheckoutForm({ preset, labels, locale = "zh" }: { preset: Preset
             className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
             value={contactName}
             onChange={(e) => setContactName(e.target.value)}
-            placeholder="姓名"
+            placeholder={labels.placeholderName}
             required
           />
         </Field>
@@ -159,7 +170,7 @@ export function CheckoutForm({ preset, labels, locale = "zh" }: { preset: Preset
             className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white"
             value={contactPhone}
             onChange={(e) => setContactPhone(e.target.value)}
-            placeholder="+86 / +81 ..."
+            placeholder={labels.placeholderPhone}
             required
           />
         </Field>
@@ -180,7 +191,7 @@ export function CheckoutForm({ preset, labels, locale = "zh" }: { preset: Preset
           className="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white min-h-24"
           value={contactNote}
           onChange={(e) => setContactNote(e.target.value)}
-          placeholder="例如：儿童座椅/需要中文司机/行李有超大件"
+          placeholder={labels.placeholderSpecial}
         />
       </Field>
 

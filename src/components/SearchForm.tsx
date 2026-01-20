@@ -18,6 +18,15 @@ type Labels = {
   luggageLarge: string;
   submit: string;
   timezoneHint?: string;
+  fromAirport: string;
+  fromLocation: string;
+  toAirport: string;
+  toLocation: string;
+  selectAirport: string;
+  selectLocation: string;
+  placeholderAirport?: string;
+  placeholderLocation?: string;
+  locationTip?: string;
 };
 
 function cn(...xs: Array<string | false | null | undefined>) {
@@ -27,7 +36,7 @@ function cn(...xs: Array<string | false | null | undefined>) {
 export function SearchForm({ labels, locale = "zh" }: { labels?: Labels; locale?: string }) {
   const router = useRouter();
   const [tripType, setTripType] = useState<TripType>("PICKUP");
-  const [fromArea, setFromArea] = useState("NRT T1 - 成田国际机场 第1航站楼");
+  const [fromArea, setFromArea] = useState("NRT T1 - Narita Terminal 1");
   const [toArea, setToArea] = useState("Shinjuku");
   const [pickupTime, setPickupTime] = useState("2026-02-01T10:00");
   const [passengers, setPassengers] = useState(2);
@@ -49,9 +58,9 @@ export function SearchForm({ labels, locale = "zh" }: { labels?: Labels; locale?
   }, [tripType, fromArea, toArea, pickupTime, passengers, luggageSmall, luggageMedium, luggageLarge]);
 
   const tripTypeLabels: Record<TripType, string> = {
-    PICKUP: labels?.pickup ?? "接机",
-    DROPOFF: labels?.dropoff ?? "送机",
-    POINT_TO_POINT: labels?.p2p ?? "点到点"
+    PICKUP: labels?.pickup ?? "Pickup",
+    DROPOFF: labels?.dropoff ?? "Drop-off",
+    POINT_TO_POINT: labels?.p2p ?? "Point-to-point"
   };
 
   return (
@@ -84,18 +93,20 @@ export function SearchForm({ labels, locale = "zh" }: { labels?: Labels; locale?
         <LocationSelector
           value={fromArea}
           onChange={setFromArea}
-          label={labels?.from ?? (tripType === "PICKUP" ? "出发机场" : "出发地点")}
-          placeholder={tripType === "PICKUP" ? "选择机场航站楼" : "选择出发地点"}
+          label={tripType === "PICKUP" ? labels?.fromAirport : labels?.fromLocation}
+          placeholder={tripType === "PICKUP" ? (labels?.placeholderAirport || labels?.selectAirport) : (labels?.placeholderLocation || labels?.selectLocation)}
           isAirport={tripType === "PICKUP"}
           locale={locale}
+          tip={labels?.locationTip}
         />
         <LocationSelector
           value={toArea}
           onChange={setToArea}
-          label={labels?.to ?? (tripType === "DROPOFF" ? "到达机场" : "到达地点")}
-          placeholder={tripType === "DROPOFF" ? "选择机场航站楼" : "选择到达地点"}
+          label={tripType === "DROPOFF" ? labels?.toAirport : labels?.toLocation}
+          placeholder={tripType === "DROPOFF" ? (labels?.placeholderAirport || labels?.selectAirport) : (labels?.placeholderLocation || labels?.selectLocation)}
           isAirport={tripType === "DROPOFF"}
           locale={locale}
+          tip={labels?.locationTip}
         />
       </div>
 
@@ -104,7 +115,7 @@ export function SearchForm({ labels, locale = "zh" }: { labels?: Labels; locale?
           <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          {labels?.pickupTime ?? "上车时间"}
+          {labels?.pickupTime ?? "Pickup Time"}
           <span className="ml-1 text-xs font-normal text-slate-500">(JST)</span>
         </div>
         <input
@@ -125,7 +136,7 @@ export function SearchForm({ labels, locale = "zh" }: { labels?: Labels; locale?
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <label className="block">
-          <div className="text-sm font-medium text-slate-700 mb-2">{labels?.passengers ?? "人数"}</div>
+          <div className="text-sm font-medium text-slate-700 mb-2">{labels?.passengers ?? "Passengers"}</div>
           <input
             type="number"
             min={1}
@@ -136,7 +147,7 @@ export function SearchForm({ labels, locale = "zh" }: { labels?: Labels; locale?
           />
         </label>
         <label className="block">
-          <div className="text-sm font-medium text-slate-700 mb-2">{labels?.luggageSmall ?? "小行李"}</div>
+          <div className="text-sm font-medium text-slate-700 mb-2">{labels?.luggageSmall ?? "Small Luggage"}</div>
           <input
             type="number"
             min={0}
@@ -147,7 +158,7 @@ export function SearchForm({ labels, locale = "zh" }: { labels?: Labels; locale?
           />
         </label>
         <label className="block">
-          <div className="text-sm font-medium text-slate-700 mb-2">{labels?.luggageMedium ?? "中行李"}</div>
+          <div className="text-sm font-medium text-slate-700 mb-2">{labels?.luggageMedium ?? "Medium Luggage"}</div>
           <input
             type="number"
             min={0}
@@ -158,7 +169,7 @@ export function SearchForm({ labels, locale = "zh" }: { labels?: Labels; locale?
           />
         </label>
         <label className="block">
-          <div className="text-sm font-medium text-slate-700 mb-2">{labels?.luggageLarge ?? "大行李"}</div>
+          <div className="text-sm font-medium text-slate-700 mb-2">{labels?.luggageLarge ?? "Large Luggage"}</div>
           <input
             type="number"
             min={0}
@@ -175,7 +186,7 @@ export function SearchForm({ labels, locale = "zh" }: { labels?: Labels; locale?
         className="btn-primary w-full mt-2"
       >
         <span className="flex items-center justify-center gap-2">
-          {labels?.submit ?? "搜索车型并报价"}
+          {labels?.submit ?? "Search"}
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>

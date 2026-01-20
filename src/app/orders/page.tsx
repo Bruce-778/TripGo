@@ -32,7 +32,32 @@ export default async function OrdersPage() {
             cancelConfirm: t("orders.cancelConfirm"),
             close: t("orders.close"),
             processing: t("orders.processing"),
-            urgentHint: t("vehicles.urgent")
+            urgentHint: t("vehicles.urgent"),
+            queryFailed: t("orders.queryFailed"),
+            cancelFailed: t("orders.cancelFailed"),
+            id: t("orders.id"),
+            pickup: t("orders.pickup"),
+            vehicle: t("orders.vehicle"),
+            amount: t("orders.amount"),
+            status: t("orders.status"),
+            action: t("orders.action"),
+            urgentTag: t("orders.urgentTag"),
+            cancelReasonDefault: t("orders.cancelReasonDefault"),
+            statuses: {
+              PENDING_PAYMENT: t("status.PENDING_PAYMENT"),
+              PAID: t("status.PAID"),
+              CONFIRMED: t("status.CONFIRMED"),
+              IN_SERVICE: t("status.IN_SERVICE"),
+              COMPLETED: t("status.COMPLETED"),
+              CANCELLED: t("status.CANCELLED"),
+            },
+            vehicles: {
+              "5座车（经济型）": t("vehicle.5seats"),
+              "7座车（商务型）": t("vehicle.7seats"),
+              "9座车（大空间）": t("vehicle.9seats"),
+              "豪华型（VIP）": t("vehicle.luxury"),
+              "大巴车（团体）": t("vehicle.bus"),
+            }
           }}
         />
       </div>
