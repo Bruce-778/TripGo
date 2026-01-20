@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#eef2ff"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#g)"/>
+  <circle cx="980" cy="140" r="70" fill="#a5b4fc"/>
+  <rect x="0" y="430" width="1200" height="170" fill="#e2e8f0"/>
+  <g fill="#0f172a" opacity="0.9">
+    <rect x="160" y="260" width="240" height="220" rx="18"/>
+    <rect x="420" y="210" width="160" height="270" rx="18"/>
+    <rect x="610" y="250" width="140" height="230" rx="18"/>
+    <path d="M820 480 L820 260 L1030 260 L1030 480 Z" />
+    <path d="M820 260 L925 190 L1030 260 Z" />
+  </g>
+  <g fill="#ffffff" opacity="0.25">
+    <rect x="190" y="300" width="28" height="50" rx="8"/>
+    <rect x="232" y="300" width="28" height="50" rx="8"/>
+    <rect x="460" y="250" width="24" height="46" rx="7"/>
+    <rect x="495" y="250" width="24" height="46" rx="7"/>
+    <rect x="845" y="300" width="28" height="50" rx="8"/>
+    <rect x="887" y="300" width="28" height="50" rx="8"/>
+  </g>
+  <text x="70" y="110" font-family="ui-sans-serif, system-ui" font-size="44" fill="#0f172a" opacity="0.9">Osaka</text>
+  <text x="70" y="160" font-family="ui-sans-serif, system-ui" font-size="22" fill="#334155">Dotonbori · Food · Night view</text>
+</svg>
+
+

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff7ed"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#g)"/>
+  <circle cx="220" cy="150" r="70" fill="#fdba74"/>
+  <path d="M0 430 C 250 360, 420 500, 650 430 C 870 365, 980 470, 1200 410 L1200 600 L0 600 Z" fill="#e2e8f0"/>
+  <g fill="#0f172a" opacity="0.9">
+    <path d="M520 220 L680 220 L720 280 L480 280 Z"/>
+    <rect x="500" y="280" width="200" height="180" rx="16"/>
+    <rect x="560" y="330" width="80" height="130" rx="12" fill="#111827"/>
+  </g>
+  <g stroke="#0f172a" stroke-width="14" stroke-linecap="round" opacity="0.7">
+    <path d="M840 250 C 900 210, 980 210, 1040 250"/>
+    <path d="M860 310 C 910 280, 970 280, 1020 310"/>
+  </g>
+  <text x="70" y="110" font-family="ui-sans-serif, system-ui" font-size="44" fill="#0f172a" opacity="0.9">Kyoto</text>
+  <text x="70" y="160" font-family="ui-sans-serif, system-ui" font-size="22" fill="#334155">Shrines · Old streets · Tea houses</text>
+</svg>
+
+
